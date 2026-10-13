@@ -1,0 +1,129 @@
+<Window x:Class="Minesweeper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Minesweeper"
+        Icon="Minesweeper.ico"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource BgBrush}"
+        Foreground="{DynamicResource InkBrush}"
+        FontFamily="Segoe UI"
+        FontSize="14"
+        KeyDown="Window_KeyDown">
+    <Grid Margin="16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Game -->
+        <StackPanel Grid.Column="0">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <ToggleButton x:Name="BtnBeginner" Tag="Beginner" Content="Beginner"
+                              Padding="12,6" Margin="0,0,6,0" Click="Level_Click"/>
+                <ToggleButton x:Name="BtnIntermediate" Tag="Intermediate" Content="Intermediate"
+                              Padding="12,6" Margin="0,0,6,0" Click="Level_Click"/>
+                <ToggleButton x:Name="BtnExpert" Tag="Expert" Content="Expert"
+                              Padding="12,6" Margin="0,0,16,0" Click="Level_Click"/>
+                <Button Content="New game (F2)" Padding="12,6" Click="NewGame_Click"/>
+            </StackPanel>
+
+            <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource LineBrush}"
+                    BorderThickness="1" Padding="14,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="70"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Mines left" FontSize="11" Foreground="{DynamicResource MutedBrush}"/>
+                        <TextBlock x:Name="MinesText" Text="010" FontSize="24" FontWeight="Bold"
+                                   Foreground="{DynamicResource AccentBrush}"/>
+                    </StackPanel>
+                    <TextBlock x:Name="StatusText" Grid.Column="1" HorizontalAlignment="Center"
+                               VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                        <TextBlock Text="Seconds" FontSize="11" Foreground="{DynamicResource MutedBrush}"
+                                   HorizontalAlignment="Right"/>
+                        <TextBlock x:Name="TimeText" Text="000" FontSize="24" FontWeight="Bold"
+                                   Foreground="{DynamicResource AccentBrush}" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border BorderBrush="{DynamicResource LineBrush}" BorderThickness="1,0,1,1" HorizontalAlignment="Left">
+                <UniformGrid x:Name="BoardGrid"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Theme + high scores -->
+        <Border Grid.Column="1" Margin="20,0,0,0" Width="330" VerticalAlignment="Top"
+                Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource LineBrush}"
+                BorderThickness="1" Padding="14">
+            <StackPanel>
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Theme" VerticalAlignment="Center" Margin="0,0,10,0"
+                               Foreground="{DynamicResource MutedBrush}"/>
+                    <ComboBox x:Name="ThemeBox" Grid.Column="1" Foreground="Black" Padding="8,4"
+                              SelectionChanged="ThemeBox_SelectionChanged"/>
+                </Grid>
+
+                <TextBlock x:Name="ScoresTitle" Text="Best times" FontSize="17" FontWeight="SemiBold" Margin="0,0,0,10"/>
+
+                <Grid Margin="6,0,6,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="28"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="72"/>
+                        <ColumnDefinition Width="84"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="#" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
+                    <TextBlock Grid.Column="1" Text="Name" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
+                    <TextBlock Grid.Column="2" Text="Time" Foreground="{DynamicResource MutedBrush}" FontSize="12"
+                               HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Column="3" Text="Date" Foreground="{DynamicResource MutedBrush}" FontSize="12"
+                               HorizontalAlignment="Right"/>
+                </Grid>
+
+                <ItemsControl x:Name="ScoreList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="Row" Padding="6,5" BorderBrush="{DynamicResource LineBrush}"
+                                    BorderThickness="0,1,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="72"/>
+                                        <ColumnDefinition Width="84"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Rank}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Time}" HorizontalAlignment="Right"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding Date}" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsNew}" Value="True">
+                                    <Setter TargetName="Row" Property="Background" Value="{DynamicResource NewRowBrush}"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock x:Name="EmptyText" Text="No times yet. Clear a board to set one."
+                           Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap" Margin="6,8,6,8"/>
+
+                <Button Content="Clear this table" HorizontalAlignment="Right" Padding="10,4" Margin="0,12,0,0"
+                        Click="ClearScores_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

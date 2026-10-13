@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Minesweeper</AssemblyName>
+    <RootNamespace>Minesweeper</RootNamespace>
+    <Version>1.0.0</Version>
+    <Company>kingtreelo inc</Company>
+    <Product>Minesweeper</Product>
+    <ApplicationIcon>Minesweeper.ico</ApplicationIcon>
+
+    <!-- Single-file exe. For a much smaller file that needs the .NET 8 Desktop Runtime installed,
+         set SelfContained to false and remove the two self-extract/compression lines. -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Minesweeper.ico" />
+  </ItemGroup>
+
+</Project>
